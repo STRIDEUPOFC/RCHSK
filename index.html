@@ -4,22 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IMPÉRIO | RCHSK</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Pinyon+Script&display=swap" rel="stylesheet">
-
     <style>
         /* * ==========================================
-         * CORE SETUP
+         * CONFIGURAÇÕES GERAIS
          * ==========================================
          */
         :root {
             --bg-deep: #050505;
-            --gold-pale: #f3e5ab; /* Champanhe suave */
-            --gold-metallic: #d4af37; /* Ouro clássico */
-            --silver-matte: #e0e0e0;
-            --ease-luxury: cubic-bezier(0.19, 1, 0.22, 1); /* Movimento ultra suave */
+            --text-platinum: #e8e8e8;
+            --text-gold: #d4af37;
+            --shadow-lux: rgba(0, 0, 0, 0.8);
+            --ease-elegant: cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         *, *::before, *::after {
@@ -36,58 +31,77 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            font-family: serif;
             -webkit-font-smoothing: antialiased;
         }
 
         /* * ==========================================
-         * LUXURY ATMOSPHERE (Backgrounds)
+         * SUAS FONTES ORIGINAIS
+         * ==========================================
+         */
+        @font-face {
+            font-family: 'Morlana';
+            src: url('fonts/MoralanaDEMO.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Nightshade';
+            src: url('fonts/NightshadeDEMO-Regular.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        /* * ==========================================
+         * AMBIENTAÇÃO (BACKGROUND)
          * ==========================================
          */
         
-        /* 1. Imagem de Fundo (Arquitetura Dark) */
+        /* 1. Imagem de Fundo (Luxo Arquitetural) */
         .bg-image {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            /* Imagem de mármore preto ou arquitetura noturna */
-            background-image: url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000&auto=format&fit=crop');
+            /* Imagem mais escura e elegante de mármore/arquitetura */
+            background-image: url('https://images.unsplash.com/photo-1600607686527-6fb886090705?q=80&w=2000&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
-            opacity: 0.25; /* Bem sutil para focar no texto */
+            opacity: 0.25; /* Baixa opacidade para destacar a fonte CLARA */
             z-index: -3;
-            filter: grayscale(100%);
-            transform: scale(1.1);
-            animation: slowZoom 30s infinite alternate;
+            filter: grayscale(100%) contrast(110%);
         }
 
-        /* 2. Vinheta de Cinema */
-        .bg-overlay {
+        /* 2. Sombra Vignette (Foco no Centro) */
+        .bg-vignette {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at center, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.95) 85%);
+            background: radial-gradient(circle, rgba(0,0,0,0.2) 0%, #000000 90%);
             z-index: -2;
         }
 
-        /* 3. Textura de Grão (Noise) para realismo */
+        /* 3. Textura de Grão Fino (Aspecto de Cinema) */
         .bg-grain {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            opacity: 0.05;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
             pointer-events: none;
             z-index: -1;
         }
 
         /* * ==========================================
-         * TYPOGRAPHY & COMPOSITION
+         * COMPOSIÇÃO DE TEXTO
          * ==========================================
          */
         .composition {
@@ -99,84 +113,104 @@
             z-index: 10;
         }
 
-        /* PRINCIPAL: IMPÉRIO */
+        /* FONTE 1: IMPÉRIO (Morlana)
+           Ajuste: Branca/Platina com brilho, não mais escura.
+        */
         .title-primary {
-            font-family: 'Cinzel', serif; /* Fonte Romana Imperial */
-            font-weight: 400;
-            font-size: clamp(3rem, 10vw, 8rem);
-            line-height: 1;
-            letter-spacing: 0.25em; /* Espaçamento = Luxo */
+            font-family: 'Morlana', serif;
+            font-size: clamp(4rem, 13vw, 11rem); /* Bem grande e imponente */
+            line-height: 0.9;
+            letter-spacing: 0.05em; /* Morlana geralmente pede menos espaço que fontes romanas */
             text-transform: uppercase;
             
-            /* Efeito Gradiente Metálico (Prata/Ouro Pálido) */
+            /* Efeito Metal Polido (Platina/Branco) */
             background: linear-gradient(
-                to bottom, 
+                135deg, 
                 #ffffff 0%, 
-                #e0e0e0 40%, 
-                #a0a0a0 100%
+                #dcdcdc 50%, 
+                #ffffff 100%
             );
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
             
+            /* Sombra suave para "flutuar" do fundo */
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+            
             position: relative;
-            margin-bottom: 10px;
-            
-            /* Sombra suave para destacar do fundo */
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8));
-            
+            margin: 0;
             opacity: 0;
-            animation: revealUp 2s var(--ease-luxury) forwards;
+            animation: riseUp 2.5s var(--ease-elegant) forwards;
         }
 
-        /* Linha fina decorativa */
-        .separator {
-            width: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--gold-metallic), transparent);
-            margin: 1.5rem 0;
-            opacity: 0.6;
-            animation: expandLine 1.5s var(--ease-luxury) forwards 1s;
+        /* Brilho passando pelo texto */
+        .title-primary::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                120deg, 
+                transparent 0%, 
+                transparent 40%, 
+                rgba(255, 255, 255, 0.4) 50%, 
+                transparent 60%
+            );
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: shineMove 6s infinite linear;
+            pointer-events: none;
         }
 
-        /* SECUNDÁRIO: RCHSK */
+        /* FONTE 2: RCHSK (Nightshade)
+           Ajuste: Dourado Champanhe para contraste elegante.
+        */
         .title-secondary {
-            font-family: 'Pinyon Script', cursive; /* Assinatura Aristocrática */
-            font-size: clamp(1.5rem, 4vw, 3rem);
-            color: var(--gold-metallic);
-            letter-spacing: 0.1em;
+            font-family: 'Nightshade', cursive;
+            font-size: clamp(2rem, 6vw, 5rem);
             
-            position: relative;
+            /* Cor Dourada Elegante (não amarela demais) */
+            color: var(--text-gold);
             
-            /* Brilho dourado suave */
-            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+            position: absolute;
+            /* Posicionamento estratégico sobreposto levemente ou logo abaixo */
+            bottom: -0.3em; 
+            right: 0.2em; /* Assinatura no canto direito inferior do bloco */
             
+            white-space: nowrap;
+            /* Sombra para legibilidade sobre o fundo */
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.9);
+            
+            z-index: 12;
             opacity: 0;
-            transform: translateY(20px);
-            animation: revealUp 2s var(--ease-luxury) forwards 1.2s;
+            transform: translateY(30px);
+            animation: signReveal 2s var(--ease-elegant) forwards 1s; /* Delay de 1s */
         }
 
-        .subtitle-desc {
-            margin-top: 15px;
-            font-family: 'Cinzel', serif;
-            font-size: 0.7rem;
-            letter-spacing: 0.4em;
-            color: rgba(255, 255, 255, 0.4);
-            text-transform: uppercase;
+        /* Linha Decorativa Fina */
+        .separator {
+            width: 1px;
+            height: 60px;
+            background: linear-gradient(to bottom, transparent, var(--text-gold), transparent);
+            margin-bottom: 20px;
             opacity: 0;
-            animation: fadeIn 2s ease forwards 2.5s;
+            animation: fadeIn 2s ease forwards 0.5s;
         }
 
         /* * ==========================================
-         * ANIMATIONS
+         * ANIMAÇÕES
          * ==========================================
          */
 
-        @keyframes revealUp {
+        @keyframes riseUp {
             0% {
                 opacity: 0;
-                transform: translateY(50px) scale(0.95);
-                filter: blur(8px);
+                transform: translateY(60px) scale(0.95);
+                filter: blur(12px);
             }
             100% {
                 opacity: 1;
@@ -185,43 +219,24 @@
             }
         }
 
-        @keyframes expandLine {
-            0% { width: 0; opacity: 0; }
-            100% { width: 150px; opacity: 0.6; }
+        @keyframes signReveal {
+            0% {
+                opacity: 0;
+                transform: translateY(40px) rotate(-2deg);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) rotate(0);
+            }
+        }
+
+        @keyframes shineMove {
+            0% { background-position: 200% center; }
+            100% { background-position: -200% center; }
         }
 
         @keyframes fadeIn {
-            to { opacity: 1; }
-        }
-
-        @keyframes slowZoom {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.1); }
-        }
-
-        /* Reflexo de luz passando (Sheen) */
-        .title-primary::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 50%;
-            height: 100%;
-            background: linear-gradient(
-                to right,
-                transparent,
-                rgba(255, 255, 255, 0.2),
-                transparent
-            );
-            transform: skewX(-25deg);
-            animation: sheen 6s infinite 3s;
-            pointer-events: none;
-        }
-
-        @keyframes sheen {
-            0% { left: -100%; opacity: 0; }
-            20% { opacity: 1; }
-            50%, 100% { left: 200%; opacity: 0; }
+            to { opacity: 0.6; }
         }
 
     </style>
@@ -229,16 +244,14 @@
 <body>
 
     <div class="bg-image"></div>
-    <div class="bg-overlay"></div>
+    <div class="bg-vignette"></div>
     <div class="bg-grain"></div>
 
     <main class="composition">
-        <h1 class="title-primary">IMPÉRIO</h1>
         <div class="separator"></div>
+        <h1 class="title-primary" data-text="IMPÉRIO">IMPÉRIO</h1>
         <div class="title-secondary">Rchsk</div>
-        <div class="subtitle-desc">Private Members Only</div>
     </main>
 
 </body>
 </html>
-
