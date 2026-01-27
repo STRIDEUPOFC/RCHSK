@@ -3,326 +3,304 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RCHSK | Private Organization</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Montserrat:wght@200;400;700&display=swap" rel="stylesheet">
+    <title>RCHSK | Private Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Montserrat:wght@200;700&family=JetBrains+Mono:wght@300&display=swap" rel="stylesheet">
 
     <style>
-        /* --- RESET & VARIÁVEIS --- */
         :root {
-            --bg-dark: #0f0f0f;
-            --bg-card: #1a1a1a;
-            --text-primary: #f0f0f0;
-            --text-secondary: #888888;
-            --accent: #ffffff; /* Branco puro para destaque */
-            --gradient: linear-gradient(135deg, #2b2b2b 0%, #1a1a1a 100%);
-            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            --bg-dark: #0a0a0a;
+            --bg-panel: #141414;
+            --accent: #ffffff;
+            --gold: #c5a059; /* Tom sutil de ouro champanhe para detalhes */
+            --text-dim: #666;
+            --border: rgba(255,255,255,0.08);
+            --transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-primary);
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background-color: var(--bg-dark); 
+            color: var(--accent); 
+            font-family: 'Inter', sans-serif; 
             overflow-x: hidden;
         }
 
-        a { text-decoration: none; color: inherit; transition: var(--transition); }
-        ul { list-style: none; }
-
-        /* --- TIPOGRAFIA --- */
-        h1, h2, h3 {
-            font-family: 'Montserrat', sans-serif;
-            letter-spacing: -0.02em;
-            text-transform: uppercase;
-        }
-
-        .highlight {
-            color: var(--text-secondary);
-            font-weight: 200;
-        }
-
-        /* --- HEADER --- */
-        header {
+        /* --- TELA DE LOGIN (OVERLAY) --- */
+        #login-overlay {
             position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 2rem 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 1000;
-            background: rgba(15, 15, 15, 0.85);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            letter-spacing: 0.2em;
-            color: var(--accent);
-        }
-
-        nav ul {
-            display: flex;
-            gap: 3rem;
-        }
-
-        nav a {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--text-secondary);
-        }
-
-        nav a:hover {
-            color: var(--accent);
-        }
-
-        /* --- HERO SECTION --- */
-        .hero {
-            height: 100vh;
+            inset: 0;
+            background: var(--bg-dark);
+            z-index: 9999;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            transition: var(--transition);
+        }
+
+        .login-box {
             text-align: center;
-            padding: 0 2rem;
-            background: radial-gradient(circle at center, #1f1f1f 0%, #0f0f0f 70%);
-        }
-
-        .hero h1 {
-            font-size: clamp(3rem, 8vw, 6rem); /* Responsivo */
-            font-weight: 700;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
-            background: -webkit-linear-gradient(#fff, #666);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero p {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin-bottom: 3rem;
-            font-weight: 300;
-        }
-
-        .btn {
-            padding: 1rem 2.5rem;
-            border: 1px solid rgba(255,255,255,0.3);
-            background: transparent;
-            color: var(--text-primary);
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .btn:hover {
-            background: var(--accent);
-            color: var(--bg-dark);
-            border-color: var(--accent);
-        }
-
-        /* --- SECTIONS GERAL --- */
-        section {
-            padding: 8rem 10%;
-        }
-
-        .section-title {
-            font-size: 2.5rem;
-            margin-bottom: 4rem;
-            border-left: 2px solid var(--accent);
-            padding-left: 1.5rem;
-        }
-
-        /* --- ABOUT (GRID) --- */
-        .about-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-        }
-
-        .about-text p {
-            margin-bottom: 1.5rem;
-            color: #ccc;
-            font-weight: 300;
-        }
-
-        /* Elemento decorativo visual */
-        .visual-box {
-            height: 400px;
             width: 100%;
-            background: var(--bg-card);
-            position: relative;
-            overflow: hidden;
+            max-width: 350px;
         }
 
-        .visual-box::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: repeating-linear-gradient(
-                45deg,
-                transparent,
-                transparent 10px,
-                rgba(255,255,255,0.03) 10px,
-                rgba(255,255,255,0.03) 11px
-            );
+        .login-box h2 {
+            font-family: 'Montserrat';
+            letter-spacing: 0.5rem;
+            margin-bottom: 2rem;
+            font-weight: 200;
         }
 
-        /* --- SERVICES (CARDS) --- */
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .card {
-            background: var(--bg-card);
-            padding: 3rem 2rem;
-            border: 1px solid rgba(255,255,255,0.05);
+        input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--border);
+            padding: 1rem;
+            color: white;
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            outline: none;
             transition: var(--transition);
         }
 
-        .card:hover {
-            transform: translateY(-10px);
-            border-color: rgba(255,255,255,0.2);
-            background: #202020;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        input:focus { border-color: var(--accent); }
+
+        /* --- DASHBOARD (ESTRUTURA) --- */
+        #dashboard {
+            display: none; /* Escondido até o login */
+            padding: 4rem 5%;
+            opacity: 0;
+            transition: opacity 1s ease;
         }
 
-        .card h3 {
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
-            color: var(--text-primary);
-        }
-
-        .card p {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-
-        .card-icon {
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
-            opacity: 0.5;
-        }
-
-        /* --- FOOTER --- */
-        footer {
-            padding: 4rem 10%;
-            border-top: 1px solid rgba(255,255,255,0.05);
+        .header-dash {
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
-            background: var(--bg-dark);
+            margin-bottom: 4rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 2rem;
         }
 
-        .footer-brand h2 {
-            font-size: 1.5rem;
+        .header-dash h1 { font-family: 'Montserrat'; font-weight: 700; letter-spacing: -1px; }
+
+        /* --- PLANILHA LUXUOSA --- */
+        .table-container {
+            background: var(--bg-panel);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        th {
+            text-align: left;
+            padding: 1.5rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.1rem;
+            font-weight: 400;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        tr:hover { background: rgba(255,255,255,0.02); }
+
+        .status-pill {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .value-up { color: #4CAF50; }
+
+        /* --- PATRIMÔNIO TOTAL --- */
+        .total-equity {
+            margin-top: 2rem;
+            padding: 3rem;
+            text-align: right;
+            border-top: 2px solid var(--accent);
+        }
+
+        .total-equity span {
+            display: block;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.2rem;
+            font-size: 0.7rem;
             margin-bottom: 0.5rem;
         }
 
-        .footer-brand span {
-            color: var(--text-secondary);
-            font-size: 0.8rem;
+        .total-equity h2 {
+            font-size: 3.5rem;
+            font-family: 'Montserrat';
+            font-weight: 700;
         }
 
-        .socials a {
-            margin-left: 1.5rem;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
+        /* Animação de Pulsar para Tempo Real */
+        .live-indicator {
+            width: 8px;
+            height: 8px;
+            background: #4CAF50;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 10px;
+            box-shadow: 0 0 10px #4CAF50;
+            animation: pulse 2s infinite;
         }
 
-        /* --- MOBILE --- */
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 3rem; }
-            .about-grid { grid-template-columns: 1fr; }
-            nav { display: none; /* Simplificado para demo */ }
-            section { padding: 4rem 5%; }
-            footer { flex-direction: column; align-items: flex-start; gap: 2rem; }
-            .socials a { margin-left: 0; margin-right: 1.5rem; }
+        @keyframes pulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
         }
+
+        .btn-access {
+            background: white;
+            color: black;
+            border: none;
+            padding: 1rem 2rem;
+            cursor: pointer;
+            font-family: 'Montserrat';
+            font-weight: 700;
+            letter-spacing: 0.1rem;
+            transition: 0.3s;
+        }
+
+        .btn-access:hover { background: #ccc; }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo">RCHSK</div>
-        <nav>
-            <ul>
-                <li><a href="#about">Sobre</a></li>
-                <li><a href="#expertise">Expertise</a></li>
-                <li><a href="#contact">Acesso</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <section class="hero">
-        <h1>Discrição.<br><span class="highlight">Estratégia.</span><br>Poder.</h1>
-        <p>A RCHSK é uma organização privada que opera nas sombras da excelência corporativa, fornecendo soluções de alto nível para clientes seletos.</p>
-        <button class="btn">Solicitar Acesso</button>
-    </section>
-
-    <section id="about">
-        <div class="about-grid">
-            <div class="visual-box">
-                </div>
-            <div class="about-text">
-                <h2 class="section-title">A Organização</h2>
-                <p>Nós não seguimos tendências; nós as definimos. A RCHSK foi fundada sob o princípio de que o verdadeiro luxo é a invisibilidade e a eficiência absoluta.</p>
-                <p>Operamos com uma metodologia proprietária, unindo design de vanguarda com inteligência estratégica para alavancar ativos e proteger legados.</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="expertise">
-        <h2 class="section-title">Áreas de Atuação</h2>
-        <div class="services-grid">
-            <div class="card">
-                <div class="card-icon">01</div>
-                <h3>Private Intelligence</h3>
-                <p>Análise de dados avançada e insights estratégicos para tomadas de decisão de alto risco em mercados globais.</p>
-            </div>
-            <div class="card">
-                <div class="card-icon">02</div>
-                <h3>Asset Management</h3>
-                <p>Gestão discreta e sofisticada de ativos tangíveis e intangíveis, garantindo perpetuidade e crescimento.</p>
-            </div>
-            <div class="card">
-                <div class="card-icon">03</div>
-                <h3>Exclusive Design</h3>
-                <p>Desenvolvimento de identidades visuais e ambientes digitais que comunicam poder sem dizer uma palavra.</p>
-            </div>
-        </div>
-    </section>
-
-    <footer id="contact">
-        <div class="footer-brand">
+    <div id="login-overlay">
+        <div class="login-box">
             <h2>RCHSK</h2>
-            <span>© 2024 Private Organization. All rights reserved.</span>
+            <p style="color: var(--text-dim); font-size: 0.7rem; margin-bottom: 2rem; letter-spacing: 0.2rem;">SISTEMA PRIVADO DE ATIVOS</p>
+            <input type="password" id="passInput" placeholder="ENTER ACCESS KEY">
+            <br>
+            <button class="btn-access" onclick="checkAccess()">UNLOCK</button>
+            <p id="errorMsg" style="color: #ff4444; margin-top: 1rem; font-size: 0.8rem; display: none;">Acesso negado.</p>
         </div>
-        <div class="socials">
-            <a href="#">LinkedIn</a>
-            <a href="#">Private Portal</a>
-            <a href="#">Contact</a>
-        </div>
-    </footer>
+    </div>
 
+    <div id="dashboard">
+        <header class="header-dash">
+            <div>
+                <p style="color: var(--text-dim); font-size: 0.8rem;">HOLDING / PRIVATE ASSETS</p>
+                <h1>System Portfolio</h1>
+            </div>
+            <div style="text-align: right;">
+                <p style="font-size: 0.8rem; font-family: 'JetBrains Mono';"><span class="live-indicator"></span>LIVE MARKET FEED</p>
+                <p id="currentDate" style="color: var(--text-dim); font-size: 0.7rem;"></p>
+            </div>
+        </header>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ativo Patrimonial</th>
+                        <th>Categoria</th>
+                        <th>Status</th>
+                        <th>Lucro Ativo (24h)</th>
+                        <th>Valor de Mercado</th>
+                    </tr>
+                </thead>
+                <tbody id="asset-table">
+                    <tr>
+                        <td>BMW M3 Competition (RCHSK Edition)</td>
+                        <td>Automotivo / Premium</td>
+                        <td><span class="status-pill">Operacional</span></td>
+                        <td class="value-up">+ $ 1.240,00</td>
+                        <td>$ 145.000,00</td>
+                    </tr>
+                    <tr>
+                        <td>Real Estate - Zurich Office</td>
+                        <td>Imobiliário</td>
+                        <td><span class="status-pill">Alugado</span></td>
+                        <td class="value-up">+ $ 12.800,00</td>
+                        <td>$ 4.200.000,00</td>
+                    </tr>
+                    <tr>
+                        <td>Equity - Tech Solutions Group</td>
+                        <td>Participação Direta</td>
+                        <td><span class="status-pill">Crescimento</span></td>
+                        <td class="value-up">+ $ 45.320,00</td>
+                        <td>$ 12.500.000,00</td>
+                    </tr>
+                    <tr>
+                        <td>Private Jet - Gulfstream G650</td>
+                        <td>Logística / Luxo</td>
+                        <td><span class="status-pill">Hangar</span></td>
+                        <td style="color: var(--text-dim)">- $ 2.100,00</td>
+                        <td>$ 65.000.000,00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="total-equity">
+            <span>Net Worth Estimado</span>
+            <h2 id="totalValue">$ 81.845.000,00</h2>
+        </div>
+    </div>
+
+    <script>
+        // Função de Acesso
+        function checkAccess() {
+            const pass = document.getElementById('passInput').value;
+            const overlay = document.getElementById('login-overlay');
+            const dash = document.getElementById('dashboard');
+            const error = document.getElementById('errorMsg');
+
+            if(pass === "123") {
+                overlay.style.opacity = "0";
+                setTimeout(() => {
+                    overlay.style.display = "none";
+                    dash.style.display = "block";
+                    setTimeout(() => dash.style.opacity = "1", 100);
+                }, 500);
+            } else {
+                error.style.display = "block";
+                document.getElementById('passInput').value = "";
+            }
+        }
+
+        // Simulação de "Tempo Real" nos números
+        function updateMarket() {
+            const values = document.querySelectorAll('.value-up');
+            values.forEach(val => {
+                let current = parseFloat(val.innerText.replace('+ $ ', '').replace('.', '').replace(',', '.'));
+                let fluctuation = (Math.random() * 10).toFixed(2);
+                val.innerText = "+ $ " + (current + parseFloat(fluctuation)).toLocaleString('pt-BR', {minimumFractionDigits: 2});
+            });
+        }
+
+        setInterval(updateMarket, 3000);
+
+        // Data Atual
+        document.getElementById('currentDate').innerText = new Date().toLocaleString('pt-BR');
+        
+        // Listener para tecla Enter
+        document.getElementById('passInput').addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                checkAccess();
+            }
+        });
+    </script>
 </body>
 </html>
