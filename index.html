@@ -3,211 +3,313 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RCHSK | Private Management</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Montserrat:wght@200;700&family=JetBrains+Mono:wght@300&display=swap" rel="stylesheet">
+    <title>RCHSK | Global Organization</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Montserrat:wght@200;400;700&family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
 
     <style>
+        /* --- 1. VARIÁVEIS E BASE (Unificação) --- */
         :root {
-            --bg-dark: #0a0a0a;
-            --bg-panel: #141414;
+            --bg-dark: #0f0f0f;
+            --bg-card: #1a1a1a;
+            --bg-panel: rgba(20, 20, 20, 0.95);
+            --text-primary: #f0f0f0;
+            --text-secondary: #888888;
             --accent: #ffffff;
-            --gold: #c5a059; /* Tom sutil de ouro champanhe para detalhes */
-            --text-dim: #666;
+            --gold: #c5a059; /* Do site 1, para detalhes de luxo */
+            --success: #4CAF50;
             --border: rgba(255,255,255,0.08);
-            --transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            
+            /* Fontes */
+            --font-main: 'Inter', sans-serif;
+            --font-display: 'Montserrat', sans-serif;
+            --font-code: 'JetBrains Mono', monospace;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            background-color: var(--bg-dark); 
-            color: var(--accent); 
-            font-family: 'Inter', sans-serif; 
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            line-height: 1.6;
             overflow-x: hidden;
         }
 
-        /* --- TELA DE LOGIN (OVERLAY) --- */
-        #login-overlay {
+        a { text-decoration: none; color: inherit; transition: var(--transition); }
+        ul { list-style: none; }
+        button { border: none; outline: none; }
+
+        /* --- 2. UTILITÁRIOS DE ANIMAÇÃO --- */
+        .fade-out { opacity: 0; pointer-events: none; }
+        .hidden { display: none !important; }
+        
+        /* --- 3. INTERFACE PÚBLICA (Landing Page) --- */
+        #public-interface {
+            transition: opacity 0.8s ease;
+        }
+
+        /* Header */
+        header {
             position: fixed;
-            inset: 0;
-            background: var(--bg-dark);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: var(--transition);
+            top: 0; width: 100%; padding: 2rem 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 100;
+            background: rgba(15, 15, 15, 0.85);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
         }
 
-        .login-box {
-            text-align: center;
-            width: 100%;
-            max-width: 350px;
+        .logo { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; letter-spacing: 0.2em; color: var(--accent); }
+
+        nav ul { display: flex; gap: 3rem; }
+        nav a { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-secondary); cursor: pointer; }
+        nav a:hover, nav a.active { color: var(--accent); }
+
+        /* Hero */
+        .hero {
+            height: 100vh;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; padding: 0 2rem;
+            background: radial-gradient(circle at center, #1f1f1f 0%, #0f0f0f 70%);
         }
 
-        .login-box h2 {
-            font-family: 'Montserrat';
-            letter-spacing: 0.5rem;
-            margin-bottom: 2rem;
-            font-weight: 200;
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 700; line-height: 1.1; margin-bottom: 1.5rem;
+            background: linear-gradient(to bottom, #fff, #666);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        input {
-            width: 100%;
+        .hero p { font-size: 1.1rem; color: var(--text-secondary); max-width: 600px; margin-bottom: 3rem; font-weight: 300; }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border: 1px solid rgba(255,255,255,0.3);
             background: transparent;
-            border: none;
-            border-bottom: 1px solid var(--border);
-            padding: 1rem;
-            color: white;
-            text-align: center;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            outline: none;
+            color: var(--text-primary);
+            font-family: var(--font-display);
+            font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.15em;
+            cursor: pointer; transition: var(--transition);
+        }
+        .btn:hover { background: var(--accent); color: var(--bg-dark); border-color: var(--accent); }
+
+        /* Sections */
+        section { padding: 8rem 10%; }
+        .section-title { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 4rem; border-left: 2px solid var(--accent); padding-left: 1.5rem; }
+
+        /* Cards Style (Usado na public e dashboard) */
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .card {
+            background: var(--bg-card); padding: 3rem 2rem;
+            border: 1px solid var(--border); transition: var(--transition);
+        }
+        .card:hover { transform: translateY(-5px); border-color: rgba(255,255,255,0.2); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        .card h3 { font-family: var(--font-display); font-size: 1.2rem; margin-bottom: 1rem; }
+        .card p { font-size: 0.9rem; color: var(--text-secondary); }
+        .card-icon { font-family: var(--font-code); color: var(--gold); margin-bottom: 1.5rem; font-size: 1.2rem; }
+
+        /* Footer */
+        footer { padding: 4rem 10%; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: flex-end; }
+        .footer-brand h2 { font-family: var(--font-display); font-size: 1.5rem; }
+        .footer-brand span { color: var(--text-secondary); font-size: 0.8rem; }
+
+        /* --- 4. OVERLAY DE LOGIN (Mecânica do Site 1) --- */
+        #login-overlay {
+            position: fixed; inset: 0;
+            background: rgba(10, 10, 10, 0.98);
+            backdrop-filter: blur(15px);
+            z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; /* Escondido por padrão */
             transition: var(--transition);
         }
 
-        input:focus { border-color: var(--accent); }
+        #login-overlay.active { opacity: 1; pointer-events: all; }
 
-        /* --- DASHBOARD (ESTRUTURA) --- */
-        #dashboard {
-            display: none; /* Escondido até o login */
-            padding: 4rem 5%;
-            opacity: 0;
+        .login-box { text-align: center; width: 100%; max-width: 350px; }
+        .login-box h2 { font-family: var(--font-display); letter-spacing: 0.5rem; margin-bottom: 2rem; font-weight: 200; }
+        
+        .input-code {
+            width: 100%; background: transparent; border: none;
+            border-bottom: 1px solid var(--border); padding: 1rem;
+            color: white; text-align: center;
+            font-family: var(--font-code); font-size: 1.2rem;
+            margin-bottom: 2rem; outline: none; transition: var(--transition);
+        }
+        .input-code:focus { border-color: var(--accent); }
+
+        .btn-access {
+            background: var(--accent); color: black; border: none;
+            padding: 1rem 2rem; cursor: pointer;
+            font-family: var(--font-display); font-weight: 700; letter-spacing: 0.1rem;
+            transition: 0.3s; width: 100%;
+        }
+        .btn-access:hover { background: #ccc; }
+        .close-login { margin-top: 2rem; color: var(--text-secondary); cursor: pointer; font-size: 0.8rem; letter-spacing: 0.1em; }
+
+        /* --- 5. DASHBOARD PRIVADO (Mecânica do Site 1 + Design Site 2) --- */
+        #private-dashboard {
+            display: none; opacity: 0;
+            padding: 8rem 5% 4rem 5%;
             transition: opacity 1s ease;
+            min-height: 100vh;
         }
 
-        .header-dash {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: 4rem;
+        .dash-header {
+            display: flex; justify-content: space-between; align-items: flex-end;
+            margin-bottom: 4rem; padding-bottom: 2rem;
             border-bottom: 1px solid var(--border);
-            padding-bottom: 2rem;
         }
-
-        .header-dash h1 { font-family: 'Montserrat'; font-weight: 700; letter-spacing: -1px; }
-
-        /* --- PLANILHA LUXUOSA --- */
+        .dash-header h1 { font-family: var(--font-display); font-weight: 700; }
+        
+        /* Tabela Luxuosa */
         .table-container {
-            background: var(--bg-panel);
+            background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 4px;
-            overflow: hidden;
+            border-radius: 4px; overflow-x: auto;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.85rem;
-        }
-
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 600px; }
+        
         th {
-            text-align: left;
-            padding: 1.5rem;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 0.1rem;
-            font-weight: 400;
-            border-bottom: 1px solid var(--border);
+            text-align: left; padding: 1.5rem; color: var(--text-secondary);
+            text-transform: uppercase; letter-spacing: 0.1rem; font-weight: 400;
+            border-bottom: 1px solid var(--border); font-family: var(--font-display);
         }
 
         td {
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--border);
-            font-family: 'JetBrains Mono', monospace;
+            padding: 1.5rem; border-bottom: 1px solid var(--border);
+            font-family: var(--font-code); color: var(--text-primary);
         }
 
         tr:hover { background: rgba(255,255,255,0.02); }
 
         .status-pill {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            background: rgba(255,255,255,0.1);
+            padding: 4px 12px; border-radius: 20px; font-size: 0.7rem;
+            background: rgba(255,255,255,0.1); font-family: var(--font-main);
         }
 
-        .value-up { color: #4CAF50; }
+        .value-up { color: var(--success); }
+        .value-down { color: #ff4444; }
 
-        /* --- PATRIMÔNIO TOTAL --- */
+        /* Total Equity */
         .total-equity {
-            margin-top: 2rem;
-            padding: 3rem;
-            text-align: right;
+            margin-top: 2rem; padding: 3rem; text-align: right;
             border-top: 2px solid var(--accent);
+            background: linear-gradient(to left, rgba(255,255,255,0.03), transparent);
         }
 
         .total-equity span {
-            display: block;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 0.2rem;
-            font-size: 0.7rem;
-            margin-bottom: 0.5rem;
+            display: block; color: var(--gold); text-transform: uppercase;
+            letter-spacing: 0.2rem; font-size: 0.7rem; margin-bottom: 0.5rem;
         }
 
-        .total-equity h2 {
-            font-size: 3.5rem;
-            font-family: 'Montserrat';
-            font-weight: 700;
-        }
+        .total-equity h2 { font-size: 3.5rem; font-family: var(--font-display); font-weight: 700; letter-spacing: -2px; }
 
-        /* Animação de Pulsar para Tempo Real */
+        /* Live Indicator */
         .live-indicator {
-            width: 8px;
-            height: 8px;
-            background: #4CAF50;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 10px;
-            box-shadow: 0 0 10px #4CAF50;
-            animation: pulse 2s infinite;
+            width: 8px; height: 8px; background: var(--success);
+            border-radius: 50%; display: inline-block; margin-right: 10px;
+            box-shadow: 0 0 10px var(--success); animation: pulse 2s infinite;
         }
+        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
 
-        @keyframes pulse {
-            0% { opacity: 0.5; }
-            50% { opacity: 1; }
-            100% { opacity: 0.5; }
+        .btn-logout {
+            background: transparent; border: 1px solid var(--border);
+            color: var(--text-secondary); padding: 0.5rem 1.5rem;
+            font-family: var(--font-code); font-size: 0.8rem; cursor: pointer;
+            margin-top: 1rem; transition: var(--transition);
         }
+        .btn-logout:hover { border-color: #ff4444; color: #ff4444; }
 
-        .btn-access {
-            background: white;
-            color: black;
-            border: none;
-            padding: 1rem 2rem;
-            cursor: pointer;
-            font-family: 'Montserrat';
-            font-weight: 700;
-            letter-spacing: 0.1rem;
-            transition: 0.3s;
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 3rem; }
+            nav { display: none; }
+            section { padding: 4rem 5%; }
+            .dash-header { flex-direction: column; align-items: flex-start; gap: 2rem; }
+            .total-equity h2 { font-size: 2.5rem; }
         }
-
-        .btn-access:hover { background: #ccc; }
     </style>
 </head>
 <body>
 
+    <div id="public-interface">
+        <header>
+            <div class="logo">RCHSK</div>
+            <nav>
+                <ul>
+                    <li><a href="#about">Sobre</a></li>
+                    <li><a href="#expertise">Expertise</a></li>
+                    <li><a onclick="toggleLogin()" class="active">Área Restrita</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <section class="hero">
+            <h1>Discrição.<br><span style="color:var(--text-secondary); font-weight:200;">Estratégia.</span><br>Poder.</h1>
+            <p>A RCHSK é uma organização privada que opera nas sombras da excelência corporativa, fornecendo soluções de alto nível para clientes seletos.</p>
+            <button class="btn" onclick="toggleLogin()">Solicitar Acesso</button>
+        </section>
+
+        <section id="expertise">
+            <h2 class="section-title">Áreas de Atuação</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-icon">01_INTEL</div>
+                    <h3>Private Intelligence</h3>
+                    <p>Análise de dados avançada e insights estratégicos para tomadas de decisão de alto risco em mercados globais.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">02_ASSET</div>
+                    <h3>Asset Management</h3>
+                    <p>Gestão discreta e sofisticada de ativos tangíveis e intangíveis, garantindo perpetuidade e crescimento.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">03_DESIGN</div>
+                    <h3>Exclusive Design</h3>
+                    <p>Desenvolvimento de identidades visuais e ambientes digitais que comunicam poder sem dizer uma palavra.</p>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="footer-brand">
+                <h2>RCHSK</h2>
+                <span>© 2026 Private Organization. All rights reserved.</span>
+            </div>
+        </footer>
+    </div>
+
     <div id="login-overlay">
         <div class="login-box">
             <h2>RCHSK</h2>
-            <p style="color: var(--text-dim); font-size: 0.7rem; margin-bottom: 2rem; letter-spacing: 0.2rem;">SISTEMA PRIVADO DE ATIVOS</p>
-            <input type="password" id="passInput" placeholder="ENTER ACCESS KEY">
-            <br>
+            <p style="color: var(--text-secondary); font-size: 0.7rem; margin-bottom: 2rem; letter-spacing: 0.2rem; font-family: var(--font-code);">SISTEMA DE GESTÃO DE ATIVOS</p>
+            <input type="password" id="passInput" class="input-code" placeholder="ACCESS KEY">
             <button class="btn-access" onclick="checkAccess()">UNLOCK</button>
-            <p id="errorMsg" style="color: #ff4444; margin-top: 1rem; font-size: 0.8rem; display: none;">Acesso negado.</p>
+            <p id="errorMsg" style="color: #ff4444; margin-top: 1rem; font-size: 0.8rem; display: none; font-family: var(--font-code);">Acesso negado.</p>
+            <div class="close-login" onclick="toggleLogin()">[ VOLTAR ]</div>
         </div>
     </div>
 
-    <div id="dashboard">
-        <header class="header-dash">
+    <div id="private-dashboard">
+        <div class="dash-header">
             <div>
-                <p style="color: var(--text-dim); font-size: 0.8rem;">HOLDING / PRIVATE ASSETS</p>
-                <h1>System Portfolio</h1>
+                <p style="color: var(--gold); font-size: 0.8rem; letter-spacing: 0.1em; margin-bottom: 0.5rem;">HOLDING / PRIVATE ASSETS</p>
+                <h1>Portfolio System</h1>
             </div>
             <div style="text-align: right;">
-                <p style="font-size: 0.8rem; font-family: 'JetBrains Mono';"><span class="live-indicator"></span>LIVE MARKET FEED</p>
-                <p id="currentDate" style="color: var(--text-dim); font-size: 0.7rem;"></p>
+                <p style="font-size: 0.8rem; font-family: var(--font-code); color: var(--success);"><span class="live-indicator"></span>LIVE MARKET FEED</p>
+                <p id="currentDate" style="color: var(--text-secondary); font-size: 0.7rem; font-family: var(--font-code);"></p>
+                <button class="btn-logout" onclick="logout()">ENCERRAR SESSÃO</button>
             </div>
-        </header>
+        </div>
 
         <div class="table-container">
             <table>
@@ -216,7 +318,7 @@
                         <th>Ativo Patrimonial</th>
                         <th>Categoria</th>
                         <th>Status</th>
-                        <th>Lucro Ativo (24h)</th>
+                        <th>Variação (24h)</th>
                         <th>Valor de Mercado</th>
                     </tr>
                 </thead>
@@ -246,7 +348,7 @@
                         <td>Private Jet - Gulfstream G650</td>
                         <td>Logística / Luxo</td>
                         <td><span class="status-pill">Hangar</span></td>
-                        <td style="color: var(--text-dim)">- $ 2.100,00</td>
+                        <td class="value-down" style="color: #ff4444">- $ 2.100,00</td>
                         <td>$ 65.000.000,00</td>
                     </tr>
                 </tbody>
@@ -260,47 +362,95 @@
     </div>
 
     <script>
-        // Função de Acesso
-        function checkAccess() {
-            const pass = document.getElementById('passInput').value;
-            const overlay = document.getElementById('login-overlay');
-            const dash = document.getElementById('dashboard');
-            const error = document.getElementById('errorMsg');
+        // --- LÓGICA DE INTERFACE ---
+        const publicInterface = document.getElementById('public-interface');
+        const loginOverlay = document.getElementById('login-overlay');
+        const dashboard = document.getElementById('private-dashboard');
+        const errorMsg = document.getElementById('errorMsg');
+        const passInput = document.getElementById('passInput');
 
-            if(pass === "123") {
-                overlay.style.opacity = "0";
+        // Alternar Login
+        function toggleLogin() {
+            loginOverlay.classList.toggle('active');
+            errorMsg.style.display = "none";
+            passInput.value = "";
+            passInput.focus();
+        }
+
+        // Verificar Senha
+        function checkAccess() {
+            if(passInput.value === "123") {
+                // Sucesso
+                loginOverlay.classList.remove('active');
+                
+                // Fade out public
+                publicInterface.style.opacity = "0";
                 setTimeout(() => {
-                    overlay.style.display = "none";
-                    dash.style.display = "block";
-                    setTimeout(() => dash.style.opacity = "1", 100);
+                    publicInterface.classList.add('hidden');
+                    dashboard.style.display = "block";
+                    // Fade in dashboard
+                    setTimeout(() => dashboard.style.opacity = "1", 50);
                 }, 500);
             } else {
-                error.style.display = "block";
-                document.getElementById('passInput').value = "";
+                // Erro
+                errorMsg.style.display = "block";
+                passInput.value = "";
+                // Efeito de tremor
+                document.querySelector('.login-box').animate([
+                    { transform: 'translateX(0)' },
+                    { transform: 'translateX(-10px)' },
+                    { transform: 'translateX(10px)' },
+                    { transform: 'translateX(0)' }
+                ], { duration: 300 });
             }
         }
 
-        // Simulação de "Tempo Real" nos números
-        function updateMarket() {
-            const values = document.querySelectorAll('.value-up');
-            values.forEach(val => {
-                let current = parseFloat(val.innerText.replace('+ $ ', '').replace('.', '').replace(',', '.'));
-                let fluctuation = (Math.random() * 10).toFixed(2);
-                val.innerText = "+ $ " + (current + parseFloat(fluctuation)).toLocaleString('pt-BR', {minimumFractionDigits: 2});
-            });
+        // Logout
+        function logout() {
+            dashboard.style.opacity = "0";
+            setTimeout(() => {
+                dashboard.style.display = "none";
+                publicInterface.classList.remove('hidden');
+                setTimeout(() => publicInterface.style.opacity = "1", 50);
+            }, 500);
         }
 
-        setInterval(updateMarket, 3000);
-
-        // Data Atual
-        document.getElementById('currentDate').innerText = new Date().toLocaleString('pt-BR');
-        
-        // Listener para tecla Enter
-        document.getElementById('passInput').addEventListener("keypress", function(event) {
+        // Enter para Login
+        passInput.addEventListener("keypress", function(event) {
             if (event.key === "Enter") {
                 checkAccess();
             }
         });
+
+        // --- LÓGICA DE MERCADO (SIMULAÇÃO) ---
+        function updateMarket() {
+            const values = document.querySelectorAll('.value-up');
+            values.forEach(val => {
+                // Extrai número
+                let cleanText = val.innerText.replace('+ $ ', '').replace('.', '').replace(',', '.');
+                let current = parseFloat(cleanText);
+                
+                // Flutuação aleatória
+                let fluctuation = (Math.random() * 50).toFixed(2);
+                let isPositive = Math.random() > 0.3; // Tendência de alta
+                
+                let newValue = isPositive ? current + parseFloat(fluctuation) : current - parseFloat(fluctuation);
+                
+                val.innerText = "+ $ " + newValue.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+            });
+
+            // Atualizar Total (simulado simples)
+            const totalDisplay = document.getElementById('totalValue');
+            let totalClean = totalDisplay.innerText.replace('$ ', '').replace(/\./g, '').replace(',', '.');
+            let total = parseFloat(totalClean);
+            total += (Math.random() * 100); 
+            totalDisplay.innerText = "$ " + total.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+        }
+
+        setInterval(updateMarket, 2000);
+
+        // Data Atual
+        document.getElementById('currentDate').innerText = new Date().toLocaleString('pt-BR', { timeZoneName: 'short' });
     </script>
 </body>
 </html>
