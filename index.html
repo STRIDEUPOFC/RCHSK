@@ -466,17 +466,17 @@ async function carregarAtivos() {
 
             tbody.innerHTML += `
                 <tr>
-                    <td>R${ativo}</td>
-                    <td>R${categoria}</td>
-                    <td><span class="status-pill">R${status}</span></td>
-                    <td class="R${variacaoClass}">R${variacaoTxt}</td>
-                    <td>R$ R${valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</td>
+                    <td>${ativo}</td>
+                    <td>${categoria}</td>
+                    <td><span class="status-pill">${status}</span></td>
+                    <td class="${variacaoClass}">${variacaoTxt}</td>
+                    <td>R$ ${valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</td>
                 </tr>
             `;
         });
 
         document.getElementById("totalValue").innerText =
-            "R$ " + total.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
+            "$ " + total.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
 
         document.getElementById("capitalLiquido").innerText =
             "CAPITAL LIQUIDO  R$ " + capitalLiquido.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
