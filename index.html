@@ -418,44 +418,53 @@
     });
 
     // --- DADOS EM TEMPO REAL (GOOGLE SHEETS) ---
-    async function carregarAtivos() {
-        try {
-            const res = await fetch(API_URL);
-            const data = await res.json();
+ async function carregarAtivos() {
+    try {
+        const res = await fetch(API_URL);
+        const data = await res.json();
 
-            const tbody = document.getElementById("asset-table");
-            tbody.innerHTML = "";
+        const tbody = document.getElementById("asset-table");
+        tbody.innerHTML = "";
 
-            let total = 0;
+        let total = 0;
 
-            data.forEach(item => {
-                const valor = Number(item.valor);
-                const variacao = Number(item.variacao);
-                total += valor;
+        data.forEach(item => {
 
-                const variacaoClass = variacao >= 0 ? "value-up" : "value-down";
-                const variacaoTxt = `${variacao >= 0 ? "+" : "-"} $ ${Math.abs(variacao).toLocaleString("pt-BR", {
-                    minimumFractionDigits: 2
-                })}`;
+            // ignora linhas vazias
+            if (!item["ATIVO PATRIMONIAL"]) return;
 
-                tbody.innerHTML += `
-                    <tr>
-                        <td>${item.ativo}</td>
-                        <td>${item.categoria}</td>
-                        <td><span class="status-pill">${item.status}</span></td>
-                        <td class="${variacaoClass}">${variacaoTxt}</td>
-                        <td>$ ${valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</td>
-                    </tr>
-                `;
-            });
+            const ativo = item["ATIVO PATRIMONIAL"];
+            const categoria = item["CATEGORIA "]; // tem espaço no final
+            const status = item["STATUS"];
 
-            document.getElementById("totalValue").innerText =
-                "$ " + total.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
+            const variacao = Number(item["EXPECTED(MONTH)"]) || 0;
+            const valor = Number(item["VALOR EM MERCADO"]) || 0;
 
-        } catch (e) {
-            console.error("Erro ao carregar dados:", e);
-        }
+            total += valor;
+
+            const variacaoClass = variacao >= 0 ? "value-up" : "value-down";
+            const variacaoTxt = `${variacao >= 0 ? "+" : "-"} $ ${Math.abs(variacao).toLocaleString("pt-BR", {
+                minimumFractionDigits: 2
+            })}`;
+
+            tbody.innerHTML += `
+                <tr>
+                    <td>${ativo}</td>
+                    <td>${categoria}</td>
+                    <td><span class="status-pill">${status}</span></td>
+                    <td class="${variacaoClass}">${variacaoTxt}</td>
+                    <td>$ ${valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</td>
+                </tr>
+            `;
+        });
+
+        document.getElementById("totalValue").innerText =
+            "$ " + total.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
+
+    } catch (e) {
+        console.error("Erro ao carregar dados:", e);
     }
+}
 
     // Atualização quase em tempo real (2s)
     setInterval(carregarAtivos, 2000);
