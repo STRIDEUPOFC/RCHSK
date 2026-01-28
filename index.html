@@ -361,96 +361,109 @@
         </div>
     </div>
 
-    <script>
-        // --- LÓGICA DE INTERFACE ---
-        const publicInterface = document.getElementById('public-interface');
-        const loginOverlay = document.getElementById('login-overlay');
-        const dashboard = document.getElementById('private-dashboard');
-        const errorMsg = document.getElementById('errorMsg');
-        const passInput = document.getElementById('passInput');
+<script>
+    // --- LÓGICA DE INTERFACE ---
+    const publicInterface = document.getElementById('public-interface');
+    const loginOverlay = document.getElementById('login-overlay');
+    const dashboard = document.getElementById('private-dashboard');
+    const errorMsg = document.getElementById('errorMsg');
+    const passInput = document.getElementById('passInput');
 
-        // Alternar Login
-        function toggleLogin() {
-            loginOverlay.classList.toggle('active');
-            errorMsg.style.display = "none";
-            passInput.value = "";
-            passInput.focus();
-        }
+    const API_URL = "https://script.google.com/macros/s/AKfycbzvqIgMgYaUCB3IUlF-y_JYoxUt-PwGXWRfkQ-r2xapzhX4Oq028CG7CmoAh6d5px7otg/exec";
 
-        // Verificar Senha
-        function checkAccess() {
-            if(passInput.value === "123") {
-                // Sucesso
-                loginOverlay.classList.remove('active');
-                
-                // Fade out public
-                publicInterface.style.opacity = "0";
-                setTimeout(() => {
-                    publicInterface.classList.add('hidden');
-                    dashboard.style.display = "block";
-                    // Fade in dashboard
-                    setTimeout(() => dashboard.style.opacity = "1", 50);
-                }, 500);
-            } else {
-                // Erro
-                errorMsg.style.display = "block";
-                passInput.value = "";
-                // Efeito de tremor
-                document.querySelector('.login-box').animate([
-                    { transform: 'translateX(0)' },
-                    { transform: 'translateX(-10px)' },
-                    { transform: 'translateX(10px)' },
-                    { transform: 'translateX(0)' }
-                ], { duration: 300 });
-            }
-        }
+    // Alternar Login
+    function toggleLogin() {
+        loginOverlay.classList.toggle('active');
+        errorMsg.style.display = "none";
+        passInput.value = "";
+        passInput.focus();
+    }
 
-        // Logout
-        function logout() {
-            dashboard.style.opacity = "0";
+    // Verificar Senha
+    function checkAccess() {
+        if (passInput.value === "123") {
+            loginOverlay.classList.remove('active');
+            publicInterface.style.opacity = "0";
             setTimeout(() => {
-                dashboard.style.display = "none";
-                publicInterface.classList.remove('hidden');
-                setTimeout(() => publicInterface.style.opacity = "1", 50);
+                publicInterface.classList.add('hidden');
+                dashboard.style.display = "block";
+                setTimeout(() => dashboard.style.opacity = "1", 50);
+                carregarAtivos(); // carrega assim que entra
             }, 500);
+        } else {
+            errorMsg.style.display = "block";
+            passInput.value = "";
+            document.querySelector('.login-box').animate([
+                { transform: 'translateX(0)' },
+                { transform: 'translateX(-10px)' },
+                { transform: 'translateX(10px)' },
+                { transform: 'translateX(0)' }
+            ], { duration: 300 });
         }
+    }
 
-        // Enter para Login
-        passInput.addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                checkAccess();
-            }
-        });
+    // Logout
+    function logout() {
+        dashboard.style.opacity = "0";
+        setTimeout(() => {
+            dashboard.style.display = "none";
+            publicInterface.classList.remove('hidden');
+            setTimeout(() => publicInterface.style.opacity = "1", 50);
+        }, 500);
+    }
 
-        // --- LÓGICA DE MERCADO (SIMULAÇÃO) ---
-        function updateMarket() {
-            const values = document.querySelectorAll('.value-up');
-            values.forEach(val => {
-                // Extrai número
-                let cleanText = val.innerText.replace('+ $ ', '').replace('.', '').replace(',', '.');
-                let current = parseFloat(cleanText);
-                
-                // Flutuação aleatória
-                let fluctuation = (Math.random() * 50).toFixed(2);
-                let isPositive = Math.random() > 0.3; // Tendência de alta
-                
-                let newValue = isPositive ? current + parseFloat(fluctuation) : current - parseFloat(fluctuation);
-                
-                val.innerText = "+ $ " + newValue.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+    // Enter para Login
+    passInput.addEventListener("keypress", function(event) {
+        if (event.key === "Enter") checkAccess();
+    });
+
+    // --- DADOS EM TEMPO REAL (GOOGLE SHEETS) ---
+    async function carregarAtivos() {
+        try {
+            const res = await fetch(API_URL);
+            const data = await res.json();
+
+            const tbody = document.getElementById("asset-table");
+            tbody.innerHTML = "";
+
+            let total = 0;
+
+            data.forEach(item => {
+                const valor = Number(item.valor);
+                const variacao = Number(item.variacao);
+                total += valor;
+
+                const variacaoClass = variacao >= 0 ? "value-up" : "value-down";
+                const variacaoTxt = `${variacao >= 0 ? "+" : "-"} $ ${Math.abs(variacao).toLocaleString("pt-BR", {
+                    minimumFractionDigits: 2
+                })}`;
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${item.ativo}</td>
+                        <td>${item.categoria}</td>
+                        <td><span class="status-pill">${item.status}</span></td>
+                        <td class="${variacaoClass}">${variacaoTxt}</td>
+                        <td>$ ${valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</td>
+                    </tr>
+                `;
             });
 
-            // Atualizar Total (simulado simples)
-            const totalDisplay = document.getElementById('totalValue');
-            let totalClean = totalDisplay.innerText.replace('$ ', '').replace(/\./g, '').replace(',', '.');
-            let total = parseFloat(totalClean);
-            total += (Math.random() * 100); 
-            totalDisplay.innerText = "$ " + total.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+            document.getElementById("totalValue").innerText =
+                "$ " + total.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
+
+        } catch (e) {
+            console.error("Erro ao carregar dados:", e);
         }
+    }
 
-        setInterval(updateMarket, 2000);
+    // Atualização quase em tempo real (2s)
+    setInterval(carregarAtivos, 2000);
 
-        // Data Atual
-        document.getElementById('currentDate').innerText = new Date().toLocaleString('pt-BR', { timeZoneName: 'short' });
-    </script>
+    // Data Atual
+    document.getElementById('currentDate').innerText =
+        new Date().toLocaleString('pt-BR', { timeZoneName: 'short' });
+</script>
+
 </body>
 </html>
