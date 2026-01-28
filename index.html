@@ -460,26 +460,26 @@ async function carregarAtivos() {
             }
 
             const variacaoClass = variacao >= 0 ? "value-up" : "value-down";
-            const variacaoTxt = `${variacao >= 0 ? "+" : "-"} $ ${Math.abs(variacao).toLocaleString("pt-BR", {
+            const variacaoTxt = `${variacao >= 0 ? "+" : "-"} R$ R${Math.abs(variacao).toLocaleString("pt-BR", {
                 minimumFractionDigits: 2
             })}`;
 
             tbody.innerHTML += `
                 <tr>
-                    <td>${ativo}</td>
-                    <td>${categoria}</td>
-                    <td><span class="status-pill">${status}</span></td>
-                    <td class="${variacaoClass}">${variacaoTxt}</td>
-                    <td>$ ${valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</td>
+                    <td>R${ativo}</td>
+                    <td>R${categoria}</td>
+                    <td><span class="status-pill">R${status}</span></td>
+                    <td class="R${variacaoClass}">R${variacaoTxt}</td>
+                    <td>R$ R${valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</td>
                 </tr>
             `;
         });
 
         document.getElementById("totalValue").innerText =
-            "$ " + total.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
+            "R$ " + total.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
 
         document.getElementById("capitalLiquido").innerText =
-            "CAPITAL LIQUIDO  $ " + capitalLiquido.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
+            "CAPITAL LIQUIDO  R$ " + capitalLiquido.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
 
     } catch (e) {
         console.error("Erro ao carregar dados:", e);
