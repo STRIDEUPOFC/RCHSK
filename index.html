@@ -428,7 +428,7 @@
     });
 
     // --- DADOS EM TEMPO REAL (GOOGLE SHEETS) ---
- async function carregarAtivos() {
+async function carregarAtivos() {
     try {
         const res = await fetch(API_URL);
         const data = await res.json();
@@ -437,20 +437,25 @@
         tbody.innerHTML = "";
 
         let total = 0;
+        let capitalLiquido = 0;
 
         data.forEach(item => {
 
-            // ignora linhas vazias
             if (!item["ATIVO PATRIMONIAL"]) return;
 
             const ativo = item["ATIVO PATRIMONIAL"];
-            const categoria = item["CATEGORIA "]; // tem espaço no final
+            const categoria = String(item["CATEGORIA "]).trim();
             const status = item["STATUS"];
 
             const variacao = Number(item["EXPECTED(MONTH)"]) || 0;
             const valor = Number(item["VALOR EM MERCADO"]) || 0;
 
             total += valor;
+
+            // 👉 soma apenas CAPITAL LIQUIDO
+            if (categoria.toUpperCase() === "CAPITAL LIQUIDO") {
+                capitalLiquido += valor;
+            }
 
             const variacaoClass = variacao >= 0 ? "value-up" : "value-down";
             const variacaoTxt = `${variacao >= 0 ? "+" : "-"} $ ${Math.abs(variacao).toLocaleString("pt-BR", {
@@ -470,6 +475,9 @@
 
         document.getElementById("totalValue").innerText =
             "$ " + total.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
+
+        document.getElementById("capitalLiquido").innerText =
+            "CAPITAL LIQUIDO  $ " + capitalLiquido.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
 
     } catch (e) {
         console.error("Erro ao carregar dados:", e);
