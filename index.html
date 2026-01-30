@@ -284,31 +284,34 @@
 
     // --- FUNÇÕES CORE ---
 
-    async function initDashboard() {
-        // Data atual
-        document.getElementById('currentDate').innerText = new Date().toLocaleString('pt-BR');
-        
-        try {
-            // Tenta fetch na API real
-               if (API_URL) {
-                const res = await fetch(API_URL);
-                const data = await res.json();
-                globalData = data;
+async function initDashboard() {
+    // 1. Atualiza a data na interface
+    document.getElementById('currentDate').innerText = new Date().toLocaleString('pt-BR');
+    
+    try {
+        if (API_URL) {
+            const response = await fetch(API_URL);
+            const res = await response.json(); // Aqui pegamos o JSON completo
+            
+            // O PULO DO GATO: Seu script manda dentro de 'data'
+            // Então precisamos acessar res.data para pegar macro e details
+            if (res.status === "success" && res.data) {
+                globalData = res.data; 
+                console.log("Dados carregados com sucesso:", globalData);
             } else {
-                // Fallback para Mock
-                console.log("Usando dados simulados (Mock)");
+                console.warn("Estrutura de dados inesperada. Usando Mock.");
                 globalData = MOCK_DATA;
-                // Simula delay de rede
-                await new Promise(r => setTimeout(r, 600)); 
             }
-            renderTable();
-        } catch (e) {
-            console.error("Erro ao carregar:", e);
-            // Fallback em caso de erro
+        } else {
             globalData = MOCK_DATA;
-            renderTable();
         }
+        renderTable();
+    } catch (e) {
+        console.error("Erro na conexão com o Sheets:", e);
+        globalData = MOCK_DATA;
+        renderTable();
     }
+}
 
     function renderTable() {
         const tbody = document.getElementById("asset-table-body");
