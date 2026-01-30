@@ -318,7 +318,10 @@ async function initDashboard() {
         tbody.innerHTML = "";
 
         globalData.macro.forEach((asset, index) => {
-            const assetId = asset.ATIVO_ID || `row-${index}`;
+            const assetId = asset.ATIVO_ID && asset.ATIVO_ID.trim() !== ""
+  ? asset.ATIVO_ID.trim()
+  : `row-${index}`;
+
             const hasDetails = globalData.details.some(d => d.ATIVO_ID === assetId);
             
             // Formatando valores
