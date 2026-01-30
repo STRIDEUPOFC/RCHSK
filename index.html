@@ -290,7 +290,7 @@
         
         try {
             // Tenta fetch na API real
-            if(API_URL && API_URL !== "https://script.google.com/macros/s/AKfycbzyLE8xdSfg2feePXy0V3HrH56vrrOCeHF9erGV29f8hmBRkErFAXMx0gEWh8uP8AR7lw/exec") {
+               if (API_URL) {
                 const res = await fetch(API_URL);
                 const data = await res.json();
                 globalData = data;
