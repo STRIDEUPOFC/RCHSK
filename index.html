@@ -3,38 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RCHSK | Private Organization</title>
+    <title>RCHSK | Portfolio Management</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Montserrat:wght@200;400;700&family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Montserrat:wght@200;400;700&family=JetBrains+Mono:wght@300;500;700&display=swap" rel="stylesheet">
 
     <style>
-        .capital-liquido {
-    margin-top: 1px;
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: #2ecc71; /* verde elegante */
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    opacity: 0.85;
-    font-family: var(--font-display);        
-}
-
-        /* --- 1. VARIÁVEIS E BASE (Unificação) --- */
+        /* --- CORE VARIABLES --- */
         :root {
             --bg-dark: #0f0f0f;
             --bg-card: #1a1a1a;
-            --bg-panel: rgba(20, 20, 20, 0.95);
+            --bg-panel: #141414;
+            --bg-detail: #111111; /* Fundo da expansão */
             --text-primary: #f0f0f0;
             --text-secondary: #888888;
             --accent: #ffffff;
-            --gold: #c5a059; /* Do site 1, para detalhes de luxo */
-            --success: #4CAF50;
+            --gold: #c5a059;
+            --gold-dim: rgba(197, 160, 89, 0.2);
+            --success: #2ecc71;
+            --danger: #e74c3c;
             --border: rgba(255,255,255,0.08);
+            --border-active: rgba(255,255,255,0.15);
             --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             
-            /* Fontes */
             --font-main: 'Inter', sans-serif;
             --font-display: 'Montserrat', sans-serif;
             --font-code: 'JetBrains Mono', monospace;
@@ -50,277 +42,173 @@
             overflow-x: hidden;
         }
 
-        a { text-decoration: none; color: inherit; transition: var(--transition); }
-        ul { list-style: none; }
-        button { border: none; outline: none; }
-
-        /* --- 2. UTILITÁRIOS DE ANIMAÇÃO --- */
-        .fade-out { opacity: 0; pointer-events: none; }
+        /* --- LAYOUT UTILS --- */
         .hidden { display: none !important; }
-        
-        /* --- 3. INTERFACE PÚBLICA (Landing Page) --- */
-        #public-interface {
-            transition: opacity 0.8s ease;
-        }
+        .fade-in { animation: fadeIn 0.8s ease forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Header */
-        header {
-            position: fixed;
-            top: 0; width: 100%; padding: 2rem 5%;
-            display: flex; justify-content: space-between; align-items: center;
-            z-index: 100;
-            background: rgba(15, 15, 15, 0.85);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border);
-        }
-
-        .logo { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; letter-spacing: 0.2em; color: var(--accent); }
-
-        nav ul { display: flex; gap: 3rem; }
-        nav a { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-secondary); cursor: pointer; }
-        nav a:hover, nav a.active { color: var(--accent); }
-
-        /* Hero */
-        .hero {
-            height: 100vh;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            text-align: center; padding: 0 2rem;
-            background: radial-gradient(circle at center, #1f1f1f 0%, #0f0f0f 70%);
-        }
-
-        .hero h1 {
-            font-family: var(--font-display);
-            font-size: clamp(3rem, 8vw, 6rem);
-            font-weight: 700; line-height: 1.1; margin-bottom: 1.5rem;
-            background: linear-gradient(to bottom, #fff, #666);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero p { font-size: 1.1rem; color: var(--text-secondary); max-width: 600px; margin-bottom: 3rem; font-weight: 300; }
-
-        .btn {
-            padding: 1rem 2.5rem;
-            border: 1px solid rgba(255,255,255,0.3);
-            background: transparent;
-            color: var(--text-primary);
-            font-family: var(--font-display);
-            font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.15em;
-            cursor: pointer; transition: var(--transition);
-        }
-        .btn:hover { background: var(--accent); color: var(--bg-dark); border-color: var(--accent); }
-
-        /* Sections */
-        section { padding: 8rem 10%; }
-        .section-title { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 4rem; border-left: 2px solid var(--accent); padding-left: 1.5rem; }
-
-        /* Cards Style (Usado na public e dashboard) */
-        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
-        .card {
-            background: var(--bg-card); padding: 3rem 2rem;
-            border: 1px solid var(--border); transition: var(--transition);
-        }
-        .card:hover { transform: translateY(-5px); border-color: rgba(255,255,255,0.2); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
-        .card h3 { font-family: var(--font-display); font-size: 1.2rem; margin-bottom: 1rem; }
-        .card p { font-size: 0.9rem; color: var(--text-secondary); }
-        .card-icon { font-family: var(--font-code); color: var(--gold); margin-bottom: 1.5rem; font-size: 1.2rem; }
-
-        /* Footer */
-        footer { padding: 4rem 10%; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: flex-end; }
-        .footer-brand h2 { font-family: var(--font-display); font-size: 1.5rem; }
-        .footer-brand span { color: var(--text-secondary); font-size: 0.8rem; }
-
-        /* --- 4. OVERLAY DE LOGIN (Mecânica do Site 1) --- */
-        #login-overlay {
-            position: fixed; inset: 0;
-            background: rgba(10, 10, 10, 0.98);
-            backdrop-filter: blur(15px);
-            z-index: 9999;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            opacity: 0; pointer-events: none; /* Escondido por padrão */
-            transition: var(--transition);
-        }
-
-        #login-overlay.active { opacity: 1; pointer-events: all; }
-
-        .login-box { text-align: center; width: 100%; max-width: 350px; }
-        .login-box h2 { font-family: var(--font-display); letter-spacing: 0.5rem; margin-bottom: 2rem; font-weight: 200; }
-        
-        .input-code {
-            width: 100%; background: transparent; border: none;
-            border-bottom: 1px solid var(--border); padding: 1rem;
-            color: white; text-align: center;
-            font-family: var(--font-code); font-size: 1.2rem;
-            margin-bottom: 2rem; outline: none; transition: var(--transition);
-        }
-        .input-code:focus { border-color: var(--accent); }
-
-        .btn-access {
-            background: var(--accent); color: black; border: none;
-            padding: 1rem 2rem; cursor: pointer;
-            font-family: var(--font-display); font-weight: 700; letter-spacing: 0.1rem;
-            transition: 0.3s; width: 100%;
-        }
-        .btn-access:hover { background: #ccc; }
-        .close-login { margin-top: 2rem; color: var(--text-secondary); cursor: pointer; font-size: 0.8rem; letter-spacing: 0.1em; }
-
-        /* --- 5. DASHBOARD PRIVADO (Mecânica do Site 1 + Design Site 2) --- */
+        /* --- DASHBOARD CONTAINER --- */
         #private-dashboard {
-            display: none; opacity: 0;
-            padding: 8rem 5% 4rem 5%;
-            transition: opacity 1s ease;
+            padding: 4rem 5%;
             min-height: 100vh;
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
         .dash-header {
             display: flex; justify-content: space-between; align-items: flex-end;
-            margin-bottom: 4rem; padding-bottom: 2rem;
+            margin-bottom: 3rem; padding-bottom: 2rem;
             border-bottom: 1px solid var(--border);
         }
-        .dash-header h1 { font-family: var(--font-display); font-weight: 700; }
-        
-        /* Tabela Luxuosa */
+        .dash-header h1 { font-family: var(--font-display); font-weight: 700; font-size: 2rem; }
+        .subtitle { color: var(--gold); font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.5rem; display: block; }
+
+        /* --- TABLE STYLES --- */
         .table-container {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 4px; overflow-x: auto;
+            border-radius: 4px;
+            overflow: hidden; /* Importante para bordas */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
-        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 600px; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
         
         th {
             text-align: left; padding: 1.5rem; color: var(--text-secondary);
-            text-transform: uppercase; letter-spacing: 0.1rem; font-weight: 400;
+            text-transform: uppercase; letter-spacing: 0.1rem; font-weight: 500; font-size: 0.7rem;
             border-bottom: 1px solid var(--border); font-family: var(--font-display);
+            background: rgba(255,255,255,0.02);
         }
 
         td {
             padding: 1.5rem; border-bottom: 1px solid var(--border);
             font-family: var(--font-code); color: var(--text-primary);
+            transition: background 0.2s;
         }
 
-        tr:hover { background: rgba(255,255,255,0.02); }
+        /* Linhas clicáveis (Master Rows) */
+        tr.master-row { cursor: pointer; position: relative; }
+        tr.master-row:hover { background: rgba(255,255,255,0.03); }
+        
+        /* Indicador de expansão (setinha ou linha lateral) */
+        tr.master-row::after {
+            content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+            background: var(--gold); transform: scaleY(0); transition: transform 0.3s ease;
+        }
+        tr.master-row.expanded::after { transform: scaleY(1); }
+        tr.master-row.expanded { background: rgba(255,255,255,0.04); }
 
+        /* --- EXPANSION SYSTEM (DETAIL ROW) --- */
+        tr.detail-row {
+            background-color: var(--bg-detail);
+            display: none; /* Controlado via JS */
+        }
+        
+        tr.detail-row.visible {
+            display: table-row;
+        }
+
+        .detail-wrapper {
+            padding: 0;
+            overflow: hidden;
+            border-bottom: 1px solid var(--border-active);
+            animation: slideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* GRID INTERNO DO STRIDEUP */
+        .system-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            padding: 2.5rem;
+        }
+
+        /* Cards de Métricas Internas */
+        .stat-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            padding: 1.25rem;
+            border-radius: 4px;
+            position: relative;
+            transition: var(--transition);
+        }
+        .stat-card:hover {
+            border-color: var(--gold-dim);
+            background: rgba(255,255,255,0.05);
+        }
+
+        .stat-label {
+            font-family: var(--font-display);
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+
+        .stat-value {
+            font-family: var(--font-code);
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .stat-unit { font-size: 0.8rem; color: var(--text-secondary); margin-left: 4px; }
+        
+        /* Cores de Status Específicas */
+        .color-gold { color: var(--gold) !important; }
+        .color-green { color: var(--success) !important; }
+        .color-red { color: var(--danger) !important; }
+
+        /* Pills & Tags */
         .status-pill {
             padding: 4px 12px; border-radius: 20px; font-size: 0.7rem;
             background: rgba(255,255,255,0.1); font-family: var(--font-main);
+            display: inline-block;
         }
+        .status-pill.active { background: rgba(46, 204, 113, 0.15); color: #2ecc71; border: 1px solid rgba(46, 204, 113, 0.2); }
+        .status-pill.warning { background: rgba(197, 160, 89, 0.15); color: var(--gold); border: 1px solid rgba(197, 160, 89, 0.2); }
 
+        /* Variações na tabela principal */
         .value-up { color: var(--success); }
-        .value-down { color: #ff4444; }
+        .value-down { color: var(--danger); }
 
-        /* Total Equity */
-        .total-equity {
-            margin-top: 2rem; padding: 3rem; text-align: right;
-            border-top: 2px solid var(--accent);
-            background: linear-gradient(to left, rgba(255,255,255,0.03), transparent);
+        /* Observação Larga */
+        .full-width-card {
+            grid-column: 1 / -1;
+            border-left: 2px solid var(--gold);
         }
 
-        .total-equity span {
-            display: block; color: var(--gold); text-transform: uppercase;
-            letter-spacing: 0.2rem; font-size: 0.7rem; margin-bottom: 0.5rem;
-        }
-
-        .total-equity h2 { font-size: 3.5rem; font-family: var(--font-display); font-weight: 700; letter-spacing: -2px; }
-
-        /* Live Indicator */
-        .live-indicator {
-            width: 8px; height: 8px; background: var(--success);
-            border-radius: 50%; display: inline-block; margin-right: 10px;
-            box-shadow: 0 0 10px var(--success); animation: pulse 2s infinite;
-        }
-        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
-
-        .btn-logout {
-            background: transparent; border: 1px solid var(--border);
-            color: var(--text-secondary); padding: 0.5rem 1.5rem;
-            font-family: var(--font-code); font-size: 0.8rem; cursor: pointer;
-            margin-top: 1rem; transition: var(--transition);
-        }
-        .btn-logout:hover { border-color: #ff4444; color: #ff4444; }
-
-        /* Mobile Adjustments */
+        /* --- RESPONSIVE --- */
         @media (max-width: 768px) {
-            .hero h1 { font-size: 3rem; }
-            nav { display: none; }
-            section { padding: 4rem 5%; }
-            .dash-header { flex-direction: column; align-items: flex-start; gap: 2rem; }
-            .total-equity h2 { font-size: 2.5rem; }
+            .table-container { overflow-x: auto; }
+            table { min-width: 600px; }
+            .system-grid { grid-template-columns: 1fr; padding: 1.5rem; }
+            .dash-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
         }
     </style>
 </head>
 <body>
 
-    <div id="public-interface">
-        <header>
-            <div class="logo">RCHSK</div>
-            <nav>
-                <ul>
-                    <li><a href="#about">Sobre</a></li>
-                    <li><a href="#expertise">Expertise</a></li>
-                    <li><a onclick="toggleLogin()" class="active">Área Restrita</a></li>
-                </ul>
-            </nav>
-        </header>
-
-        <section class="hero">
-            <h1>Consistencia.<br><span style="color:var(--text-secondary); font-weight:200;">Foco.</span><br>Poder.</h1>
-            <p>A RCHSK é uma organização privada que opera nas sombras da excelência corporativa, fornecendo soluções de alto nível para clientes seletos.</p>
-            <button class="btn" onclick="toggleLogin()">Solicitar Acesso</button>
-        </section>
-
-        <section id="expertise">
-            <h2 class="section-title">Áreas de Atuação</h2>
-            <div class="card-grid">
-                <div class="card">
-                    <div class="card-icon">01_INTEL</div>
-                    <h3>Private Intelligence</h3>
-                    <p>Análise de dados avançada e insights estratégicos para tomadas de decisão de alto risco em mercados globais.</p>
-                </div>
-                <div class="card">
-                    <div class="card-icon">02_ASSET</div>
-                    <h3>Asset Management</h3>
-                    <p>Gestão discreta e sofisticada de ativos tangíveis e intangíveis, garantindo perpetuidade e crescimento.</p>
-                </div>
-                <div class="card">
-                    <div class="card-icon">03_DESIGN</div>
-                    <h3>Exclusive Design</h3>
-                    <p>Desenvolvimento de identidades visuais e ambientes digitais que comunicam poder sem dizer uma palavra.</p>
-                </div>
-            </div>
-        </section>
-
-        <footer>
-            <div class="footer-brand">
-                <h2>RCHSK</h2>
-                <span>© 2026 Private Organization. All rights reserved.</span>
-            </div>
-        </footer>
-    </div>
-
-    <div id="login-overlay">
-        <div class="login-box">
-            <h2>RCHSK</h2>
-            <p style="color: var(--text-secondary); font-size: 0.7rem; margin-bottom: 2rem; letter-spacing: 0.2rem; font-family: var(--font-code);">SISTEMA DE GESTÃO DE ATIVOS</p>
-            <input type="password" id="passInput" class="input-code" placeholder="ACCESS KEY">
-            <button class="btn-access" onclick="checkAccess()">UNLOCK</button>
-            <p id="errorMsg" style="color: #ff4444; margin-top: 1rem; font-size: 0.8rem; display: none; font-family: var(--font-code);">Acesso negado.</p>
-            <div class="close-login" onclick="toggleLogin()">[ VOLTAR ]</div>
-        </div>
-    </div>
-
-    <div id="private-dashboard">
+    <div id="private-dashboard" class="fade-in">
         <div class="dash-header">
             <div>
-                <p style="color: var(--gold); font-size: 0.8rem; letter-spacing: 0.1em; margin-bottom: 0.5rem;">HOLDING / PRIVATE ASSETS</p>
-                <h1>Portfolio System</h1>
+                <span class="subtitle">Holding / Active Systems</span>
+                <h1>Portfolio Intelligence</h1>
             </div>
             <div style="text-align: right;">
-                <p style="font-size: 0.8rem; font-family: var(--font-code); color: var(--success);"><span class="live-indicator"></span>LIVE MARKET FEED</p>
-                <p id="currentDate" style="color: var(--text-secondary); font-size: 0.7rem; font-family: var(--font-code);"></p>
-                <button class="btn-logout" onclick="logout()">ENCERRAR SESSÃO</button>
+                <p style="font-size: 0.8rem; font-family: var(--font-code); color: var(--success);">● SYSTEM ONLINE</p>
+                <p id="currentDate" style="color: var(--text-secondary); font-size: 0.7rem; font-family: var(--font-code); margin-top:5px;"></p>
             </div>
         </div>
+
         <div class="table-container">
             <table>
                 <thead>
@@ -332,167 +220,222 @@
                         <th>Valor de Mercado</th>
                     </tr>
                 </thead>
-                <tbody id="asset-table">
-                    <tr>
-                        <td>BMW M3 Competition (RCHSK Edition)</td>
-                        <td>Automotivo / Premium</td>
-                        <td><span class="status-pill">Operacional</span></td>
-                        <td class="value-up">+ R$ 1.240,00</td>
-                        <td>R$ 145.000,00</td>
-                    </tr>
-                    <tr>
-                        <td>Real Estate - Zurich Office</td>
-                        <td>Imobiliário</td>
-                        <td><span class="status-pill">Alugado</span></td>
-                        <td class="value-up">+ R$ 12.800,00</td>
-                        <td>R$ 4.200.000,00</td>
-                    </tr>
-                    <tr>
-                        <td>Equity - Tech Solutions Group</td>
-                        <td>Participação Direta</td>
-                        <td><span class="status-pill">Crescimento</span></td>
-                        <td class="value-up">+ R$ 45.320,00</td>
-                        <td>R$ 12.500.000,00</td>
-                    </tr>
-                    <tr>
-                        <td>Private Jet - Gulfstream G650</td>
-                        <td>Logística / Luxo</td>
-                        <td><span class="status-pill">Hangar</span></td>
-                        <td class="value-down" style="color: #ff4444">- R$ 2.100,00</td>
-                        <td>R$ 65.000.000,00</td>
-                    </tr>
-                </tbody>
+                <tbody id="asset-table-body">
+                    </tbody>
             </table>
         </div>
 
-        <div class="total-equity">
-            <span>Net Worth Estimado</span>
-            <h2 id="totalValue">R$ 81.845.000,00</h2>
-            <div id="capitalLiquido" class="capital-liquido"></div>
+        <div style="margin-top: 2rem; text-align: right; opacity: 0.5; font-size: 0.7rem; font-family: var(--font-code);">
+            RCHSK SECURE SERVER // ENCRYPTED
         </div>
     </div>
-<div id="capitalLiquido" class="capital-liquido"></div>
 
 <script>
-    // --- LÓGICA DE INTERFACE ---
-    const publicInterface = document.getElementById('public-interface');
-    const loginOverlay = document.getElementById('login-overlay');
-    const dashboard = document.getElementById('private-dashboard');
-    const errorMsg = document.getElementById('errorMsg');
-    const passInput = document.getElementById('passInput');
+    // --- CONFIGURAÇÃO ---
+    // URL do seu Web App do Google Apps Script
+    // Para teste, deixe vazio e o sistema usará MOCK_DATA
+    const API_URL = "URL_DO_SEU_APPS_SCRIPT_AQUI"; 
 
-    const API_URL = "https://script.google.com/macros/s/AKfycbzvqIgMgYaUCB3IUlF-y_JYoxUt-PwGXWRfkQ-r2xapzhX4Oq028CG7CmoAh6d5px7otg/exec";
+    // --- DADOS SIMULADOS (MOCK) ---
+    // Usado se a API falhar ou não estiver configurada
+    const MOCK_DATA = {
+        macro: [
+            {
+                "ATIVO_ID": "STRIDEUP",
+                "ATIVO PATRIMONIAL": "STRIDEUP System (Neural)",
+                "CATEGORIA": "Algorithmic Trading",
+                "STATUS": "Operacional",
+                "EXPECTED(MONTH)": 45320,
+                "VALOR EM MERCADO": 12500000
+            },
+            {
+                "ATIVO_ID": "REAL_ESTATE_01",
+                "ATIVO PATRIMONIAL": "Zurich Office Complex",
+                "CATEGORIA": "Imobiliário",
+                "STATUS": "Alugado",
+                "EXPECTED(MONTH)": 12800,
+                "VALOR EM MERCADO": 4200000
+            },
+            {
+                "ATIVO_ID": "M3_COMP",
+                "ATIVO PATRIMONIAL": "BMW M3 Competition",
+                "CATEGORIA": "Automotivo",
+                "STATUS": "Hangar",
+                "EXPECTED(MONTH)": 1240,
+                "VALOR EM MERCADO": 645000
+            }
+        ],
+        details: [
+            // Dados específicos do STRIDEUP
+            { "ATIVO_ID": "STRIDEUP", "METRICA": "ROI (7 Dias)", "VALOR": "3.4", "UNIDADE": "%", "STATUS": "positive", "OBS": "" },
+            { "ATIVO_ID": "STRIDEUP", "METRICA": "ROI (Acumulado)", "VALOR": "142.8", "UNIDADE": "%", "STATUS": "positive", "OBS": "" },
+            { "ATIVO_ID": "STRIDEUP", "METRICA": "Capital Líquido", "VALOR": "12.500", "UNIDADE": "MM", "STATUS": "neutral", "OBS": "Alocação dinâmica" },
+            { "ATIVO_ID": "STRIDEUP", "METRICA": "Drawdown Max", "VALOR": "-2.1", "UNIDADE": "%", "STATUS": "warning", "OBS": "" },
+            { "ATIVO_ID": "STRIDEUP", "METRICA": "Trades Ativos", "VALOR": "8", "UNIDADE": "", "STATUS": "neutral", "OBS": "" },
+            { "ATIVO_ID": "STRIDEUP", "METRICA": "Health Check", "VALOR": "100", "UNIDADE": "%", "STATUS": "positive", "OBS": "Latência < 20ms" },
+            { "ATIVO_ID": "STRIDEUP", "METRICA": "Next Rebalance", "VALOR": "04h 12m", "UNIDADE": "", "STATUS": "neutral", "OBS": "" },
+            { "ATIVO_ID": "STRIDEUP", "METRICA": "Insight Estratégico", "VALOR": "Alta Volatilidade", "UNIDADE": "", "STATUS": "gold", "OBS": "O modelo identificou oportunidade de arbitragem em pares EUR/USD devido a notícias macroeconômicas. Exposição aumentada em 15%." }
+        ]
+    };
 
-    // Alternar Login
-    function toggleLogin() {
-        loginOverlay.classList.toggle('active');
-        errorMsg.style.display = "none";
-        passInput.value = "";
-        passInput.focus();
-    }
+    // --- VARIÁVEIS GLOBAIS ---
+    let globalData = { macro: [], details: [] };
+    let expandedRowId = null;
 
-    // Verificar Senha
-    function checkAccess() {
-        if (passInput.value === "123") {
-            loginOverlay.classList.remove('active');
-            publicInterface.style.opacity = "0";
-            setTimeout(() => {
-                publicInterface.classList.add('hidden');
-                dashboard.style.display = "block";
-                setTimeout(() => dashboard.style.opacity = "1", 50);
-                carregarAtivos(); // carrega assim que entra
-            }, 500);
-        } else {
-            errorMsg.style.display = "block";
-            passInput.value = "";
-            document.querySelector('.login-box').animate([
-                { transform: 'translateX(0)' },
-                { transform: 'translateX(-10px)' },
-                { transform: 'translateX(10px)' },
-                { transform: 'translateX(0)' }
-            ], { duration: 300 });
+    // --- FUNÇÕES CORE ---
+
+    async function initDashboard() {
+        // Data atual
+        document.getElementById('currentDate').innerText = new Date().toLocaleString('pt-BR');
+        
+        try {
+            // Tenta fetch na API real
+            if(API_URL && API_URL !== "URL_DO_SEU_APPS_SCRIPT_AQUI") {
+                const res = await fetch(API_URL);
+                const data = await res.json();
+                globalData = data;
+            } else {
+                // Fallback para Mock
+                console.log("Usando dados simulados (Mock)");
+                globalData = MOCK_DATA;
+                // Simula delay de rede
+                await new Promise(r => setTimeout(r, 600)); 
+            }
+            renderTable();
+        } catch (e) {
+            console.error("Erro ao carregar:", e);
+            // Fallback em caso de erro
+            globalData = MOCK_DATA;
+            renderTable();
         }
     }
 
-    // Logout
-    function logout() {
-        dashboard.style.opacity = "0";
-        setTimeout(() => {
-            dashboard.style.display = "none";
-            publicInterface.classList.remove('hidden');
-            setTimeout(() => publicInterface.style.opacity = "1", 50);
-        }, 500);
-    }
-
-    // Enter para Login
-    passInput.addEventListener("keypress", function(event) {
-        if (event.key === "Enter") checkAccess();
-    });
-
-    // --- DADOS EM TEMPO REAL (GOOGLE SHEETS) ---
-async function carregarAtivos() {
-    try {
-        const res = await fetch(API_URL);
-        const data = await res.json();
-
-        const tbody = document.getElementById("asset-table");
+    function renderTable() {
+        const tbody = document.getElementById("asset-table-body");
         tbody.innerHTML = "";
 
-        let total = 0;
-        let capitalLiquido = 0;
-
-        data.forEach(item => {
-
-            if (!item["ATIVO PATRIMONIAL"]) return;
-
-            const ativo = item["ATIVO PATRIMONIAL"];
-            const categoria = String(item["CATEGORIA "]).trim();
-            const status = item["STATUS"];
-
-            const variacao = Number(item["EXPECTED(MONTH)"]) || 0;
-            const valor = Number(item["VALOR EM MERCADO"]) || 0;
-
-            total += valor;
-
-            // 👉 soma apenas CAPITAL LIQUIDO
-            if (categoria.toUpperCase() === "CAPITAL LIQUIDO") {
-                capitalLiquido += valor;
-            }
-
+        globalData.macro.forEach((asset, index) => {
+            const assetId = asset.ATIVO_ID || `row-${index}`;
+            const hasDetails = globalData.details.some(d => d.ATIVO_ID === assetId);
+            
+            // Formatando valores
+            const variacao = Number(asset["EXPECTED(MONTH)"]) || 0;
+            const valor = Number(asset["VALOR EM MERCADO"]) || 0;
             const variacaoClass = variacao >= 0 ? "value-up" : "value-down";
-            const variacaoTxt = `${variacao >= 0 ? "+" : "-"} R$ R${Math.abs(variacao).toLocaleString("pt-BR", {
-                minimumFractionDigits: 2
-            })}`;
+            const variacaoSymbol = variacao >= 0 ? "+" : "";
 
-            tbody.innerHTML += `
-                <tr>
-                    <td>${ativo}</td>
-                    <td>${categoria}</td>
-                    <td><span class="status-pill">${status}</span></td>
-                    <td class="${variacaoClass}">${variacaoTxt}</td>
-                    <td>R$ ${valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</td>
-                </tr>
+            // 1. Criar a LINHA MASTER
+            const tr = document.createElement("tr");
+            tr.className = "master-row";
+            tr.dataset.id = assetId;
+            tr.onclick = () => toggleDetails(assetId, hasDetails);
+
+            tr.innerHTML = `
+                <td>
+                    ${asset["ATIVO PATRIMONIAL"]} 
+                    ${hasDetails ? '<span style="font-size:0.6rem; color:var(--gold); margin-left:8px;">[+]</span>' : ''}
+                </td>
+                <td>${asset["CATEGORIA"] || asset["CATEGORIA "]}</td>
+                <td><span class="status-pill ${asset.STATUS === 'Operacional' ? 'active' : ''}">${asset.STATUS}</span></td>
+                <td class="${variacaoClass}">${variacaoSymbol} R$ ${variacao.toLocaleString("pt-BR")}</td>
+                <td style="font-weight:700">R$ ${valor.toLocaleString("pt-BR")}</td>
             `;
+            tbody.appendChild(tr);
+
+            // 2. Criar a LINHA DE DETALHES (Oculta por padrão)
+            if (hasDetails) {
+                const detailTr = document.createElement("tr");
+                detailTr.className = "detail-row";
+                detailTr.id = `detail-${assetId}`;
+                
+                // Célula única ocupando todas as colunas
+                const detailTd = document.createElement("td");
+                detailTd.colSpan = 5; 
+                detailTd.className = "detail-wrapper";
+                
+                // Conteúdo interno (Grid)
+                detailTd.innerHTML = buildDetailsHTML(assetId);
+                
+                detailTr.appendChild(detailTd);
+                tbody.appendChild(detailTr);
+            }
+        });
+    }
+
+    // --- LÓGICA DE DETALHES ---
+
+    function buildDetailsHTML(assetId) {
+        // Filtrar métricas deste ativo
+        const metrics = globalData.details.filter(d => d.ATIVO_ID === assetId);
+
+        let html = `<div class="system-grid">`;
+
+        metrics.forEach(m => {
+            // Define cor baseada no status
+            let valColor = "";
+            if(m.STATUS === 'positive') valColor = "color-green";
+            if(m.STATUS === 'warning' || m.STATUS === 'negative') valColor = "color-red";
+            if(m.STATUS === 'gold') valColor = "color-gold";
+
+            // Se for o Insight/Obs, usa card largo
+            if(m.METRICA.includes("Insight") || m.OBS.length > 50) {
+                html += `
+                    <div class="stat-card full-width-card">
+                        <span class="stat-label" style="color:var(--gold)">${m.METRICA}</span>
+                        <div class="stat-value" style="font-size: 0.9rem; line-height:1.5;">
+                            ${m.OBS || m.VALOR}
+                        </div>
+                    </div>
+                `;
+            } else {
+                // Card padrão
+                html += `
+                    <div class="stat-card">
+                        <span class="stat-label">${m.METRICA}</span>
+                        <div class="stat-value ${valColor}">
+                            ${m.VALOR}<span class="stat-unit">${m.UNIDADE}</span>
+                        </div>
+                        ${m.OBS ? `<div style="font-size:0.65rem; color:var(--text-secondary); margin-top:8px; border-top:1px solid rgba(255,255,255,0.05); padding-top:4px;">${m.OBS}</div>` : ''}
+                    </div>
+                `;
+            }
         });
 
-        document.getElementById("totalValue").innerText =
-            "$ " + total.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
-
-        document.getElementById("capitalLiquido").innerText =
-            "CAPITAL LIQUIDO  R$ " + capitalLiquido.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
-
-    } catch (e) {
-        console.error("Erro ao carregar dados:", e);
+        html += `</div>`;
+        return html;
     }
-}
 
-    // Atualização quase em tempo real (2s)
-    setInterval(carregarAtivos, 2000);
+    function toggleDetails(id, hasDetails) {
+        if (!hasDetails) return;
 
-    // Data Atual
-    document.getElementById('currentDate').innerText =
-        new Date().toLocaleString('pt-BR', { timeZoneName: 'short' });
+        const detailRow = document.getElementById(`detail-${id}`);
+        const masterRow = document.querySelector(`tr[data-id="${id}"]`);
+
+        // Se já está aberto, fecha
+        if (expandedRowId === id) {
+            detailRow.classList.remove('visible');
+            masterRow.classList.remove('expanded');
+            expandedRowId = null;
+            return;
+        }
+
+        // Se há outro aberto, fecha o anterior
+        if (expandedRowId) {
+            const oldDetail = document.getElementById(`detail-${expandedRowId}`);
+            const oldMaster = document.querySelector(`tr[data-id="${expandedRowId}"]`);
+            if(oldDetail) oldDetail.classList.remove('visible');
+            if(oldMaster) oldMaster.classList.remove('expanded');
+        }
+
+        // Abre o novo
+        detailRow.classList.add('visible');
+        masterRow.classList.add('expanded');
+        expandedRowId = id;
+    }
+
+    // Iniciar
+    initDashboard();
+
 </script>
-
 </body>
 </html>
